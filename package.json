@@ -1,15 +1,15 @@
 {
-  "name": "infinite-scroll",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "gitlog",
+  "version": "0.42.0",
+  "description": "web page to read commit log messages from github repo",
   "scripts": {
     "build": "webpack --mode development",
+    "start:dev": "webpack-dev-server --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Basavanagowda Kanur <basavanagowda@gmail.com>",
+  "license": "Beerware",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
