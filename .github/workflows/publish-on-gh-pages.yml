@@ -23,7 +23,10 @@ jobs:
       - name: Update script tag source in index.html
         run: sed -i 's,../dist/bundle.js,bundle.js,' index.html
       - name: Remove all the source
-        run: rm -rf src public package.json package-lock.json README.md webpack.config.js
+        run: |
+          rm -rf src public
+          rm package.json package-lock.json README.md webpack.config.js
+          rm -rf .github
       - name: Commit the changes
         run: |
           cd $GITHUB_WORKSPACE
