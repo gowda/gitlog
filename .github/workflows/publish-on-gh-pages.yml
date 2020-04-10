@@ -15,7 +15,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Copy totally static assets
-        run: cp {custom.css, GitHub-Mark-64px.png} .
+        run: cp public/custom.css public/GitHub-Mark-64px.png .
       - name: Copy generated javascript bundle
         run: cp dist/bundle.js .
       - name: Copy index.html
