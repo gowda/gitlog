@@ -25,7 +25,8 @@ jobs:
       - name: Remove all the source
         run: |
           rm -rf src public
-          rm package.json package-lock.json README.md webpack.config.js
+          rm package.json package-lock.json README.md
+          rm .babelrc webpack.config.js
           rm -rf .github
       - name: Commit the changes
         run: |
