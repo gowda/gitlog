@@ -1,0 +1,33 @@
+name: publish-on-gh-pages
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: npm ci
+      - run: npm run build
+      - name: Copy totally static assets
+        run: cp {custom.css, GitHub-Mark-64px.png} .
+      - name: Copy generated javascript bundle
+        run: cp dist/bundle.js .
+      - name: Copy index.html
+        run: cp public/index.html .
+      - name: Update script tag source in index.html
+        run: sed -i 's,../dist/bundle.js,bundle.js' index.html
+      - name: Remove all the source
+        run: rm -rf src public package.json package-lock.json README.md webpack.config.js
+      - name: Commit the changes
+        run: |
+          cd $GITHUB_WORKSPACE
+          git fetch --unshallow origin
+          git add custom.css GitHub-Mark-64px.png bundle.js index.html
+          git commit -a -m 'Update gh-pages on master changes'
+          git push -f origin ${{ github.ref }}:gh-pages
