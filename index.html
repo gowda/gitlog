@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<div id="root"></div>
+<noscript>
+  You need to enable JavaScript to experience this page.
+</noscript>
+<script src={{ "/assets/js/bundle.js" | relative_url }}></script>
+
+<div>
+  <h5>What is this?</h5>
+  <p>Github log is paginated & also does not allow for filtering merge commits.</p>
+  <p>gitlog allows you to view the commits while filtering out merge commits.</p>
+</div>
+
+<div>
+  <h5>What does it use?</h5>
+  <p>
+    React for rendering the page. whatwg-fetch for fetching commits using Github API.
+    Application state is managed by the top-level react component using hooks.
+  </p>
+</div>

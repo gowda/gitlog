@@ -1,0 +1,6 @@
+title: 'gitlog'
+description: 'web page to read commit messages from github repo'
+google_analytics: 'UA-163342417-1'
+theme: null
+plugins:
+  - jekyll-octicons

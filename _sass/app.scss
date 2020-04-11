@@ -1,0 +1,21 @@
+div#root {
+  max-height: 50vh;
+  overflow-y: scroll;
+
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+
+    a.github > img {
+      width: 32px;
+    }
+
+    .commits {
+      .commit {
+        a.github > img {
+          width: 32px;
+        }
+      }
+    }
+  }
+}
