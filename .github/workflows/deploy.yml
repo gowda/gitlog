@@ -1,9 +1,9 @@
-name: publish-on-gh-pages
+name: deploy
 
 on: [push]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master' }}
     steps:
@@ -26,7 +26,7 @@ jobs:
         run: |
           rm -rf src public
           rm package.json package-lock.json README.md
-          rm .babelrc webpack.config.js
+          rm webpack.config.js
           rm -rf .github
       - name: Commit the changes
         run: |
