@@ -1,10 +1,9 @@
-export default {
-  httpOptions: {
+const httpOptions = {
     method: 'GET',
-    redirect: 'follow',
-  },
-  fetchRepo(name) {
-    return fetch(`https://api.github.com/repos/${name}`, this.httpOptions)
+    redirect: 'follow' as RequestRedirect,
+};
+
+const fetchRepo = (name: string) => fetch(`https://api.github.com/repos/${name}`, httpOptions)
       .then(response => response.json())
       .then(json => ({
         owner: json.owner.login,
@@ -14,14 +13,13 @@ export default {
         description: json.description,
         commits: []
       }));
-  },
-  fetchCommits(name) {
-    return fetch(`https://api.github.com/repos/${name}/commits`, this.httpOptions)
+
+const fetchCommits = (name: string) => fetch(`https://api.github.com/repos/${name}/commits`, httpOptions)
       .then(response => response.json())
       .then(json => {
         console.log(json);
         return json.map(
-          ({ sha, html_url, commit }) => ({
+          ({ sha, html_url, commit }: any) => ({
             author: `${commit.author.name} <${commit.author.email}>`,
             timestamp: commit.author.date,
             message: commit.message.length > 80 ? `${commit.message.substring(0, 77)} ...` : commit.message,
@@ -29,5 +27,5 @@ export default {
             url: html_url,
         }));
       });
-  },
-}
+
+export default {fetchRepo, fetchCommits}
