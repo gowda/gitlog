@@ -19,26 +19,26 @@ const config: Configuration = {
       {
         enforce: 'pre',
         test: /\.js$/,
-        loader: 'source-map-loader'
+        loader: 'source-map-loader',
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
   },
   resolve: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
   output: {
     path: path.resolve(__dirname, 'dist/'),
     publicPath: '/dist/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, 'public/')
+      directory: path.join(__dirname, 'public/'),
     },
     port: 3000,
-  }
-}
+  },
+};
 
 export default config;

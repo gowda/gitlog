@@ -6,7 +6,7 @@ import Scroll from './components/scroll';
 
 import GitHub from './github';
 
-interface Commit {
+interface ICommit {
   author: string;
   timestamp: string;
   message: string;
@@ -25,28 +25,26 @@ export default () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [fetched, setFetched] = useState<boolean>(false);
   const [repo, setRepo] = useState<Repo>();
-  const [commits, setCommits] = useState<Commit[]>([]);
+  const [commits, setCommits] = useState<ICommit[]>([]);
 
   useEffect(() => {
     if (scrollRef.current) {
       const options = {
         rootMargin: '0px',
-        threshold: 1.0
-      }
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            const { isIntersecting } = entry;
-            if (isIntersecting && entry.target.id === 'scroll') {
-              if (repo) {
-                GitHub.fetchCommits('rails/rails')
-                  .then((moreCommits) => setCommits([...commits, ...moreCommits]))
-              }
+        threshold: 1.0,
+      };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const { isIntersecting } = entry;
+          if (isIntersecting && entry.target.id === 'scroll') {
+            if (repo) {
+              GitHub.fetchCommits('rails/rails').then((moreCommits) =>
+                setCommits([...commits, ...moreCommits])
+              );
             }
-          });
-        },
-        options
-      );
+          }
+        });
+      }, options);
       observer.observe(scrollRef.current);
     }
   }, [scrollRef.current]);
@@ -54,21 +52,22 @@ export default () => {
   useEffect(() => {
     if (!fetched) {
       GitHub.fetchRepo('rails/rails')
-        .then(repo => setRepo({...repo}))
+        .then((newRepo: Repo) => setRepo({ ...newRepo }))
         .then(() => setFetched(true))
         .then(() => GitHub.fetchCommits('rails/rails'))
-        .then(commits => setCommits([...commits]))
-        .catch(error => console.log('error', error));
+        .then((newCommits: ICommit[]) => setCommits([...newCommits]))
+        .catch((error) => console.log('error', error));
     }
   });
 
-  return(
+  return (
     <div className='container'>
       {repo && <Info {...repo} />}
-      <div className="commits list-group list-group-flush">
-        {commits && commits.map((commit, index) => (<Commit key={index} {...commit} />))}
+      <div className='commits list-group list-group-flush'>
+        {commits &&
+          commits.map((commit, index) => <Commit key={index} {...commit} />)}
         <Scroll ref={scrollRef} />
       </div>
     </div>
-  )
-}
+  );
+};
