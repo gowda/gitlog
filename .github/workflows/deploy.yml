@@ -26,7 +26,7 @@ jobs:
         run: |
           rm -rf src public
           rm package.json package-lock.json README.md
-          rm webpack.config.js
+          rm webpack.config.ts
           rm -rf .github
       - name: Commit the changes
         run: |
