@@ -1,5 +1,4 @@
-import React, { Component, createRef } from 'react';
-import { hot } from 'react-hot-loader';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Info from './components/info';
 import Commit from './components/commit';
@@ -22,81 +21,54 @@ interface Repo {
   description: string;
 }
 
-interface Props {
+export default () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [fetched, setFetched] = useState<boolean>(false);
+  const [repo, setRepo] = useState<Repo>();
+  const [commits, setCommits] = useState<Commit[]>([]);
 
-}
-
-interface State {
-  repo?: Repo;
-  commits: Commit[];
-}
-
-class App extends Component<Props, State> {
-  private scrollRef: React.RefObject<HTMLDivElement>;
-  private observer: IntersectionObserver;
-
-  constructor(props: Props) {
-    super(props);
-    this.scrollRef = createRef<HTMLDivElement>();
-
-    const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          const { isIntersecting } = entry;
-          if (isIntersecting && entry.target.id === 'scroll') {
-            if (this.state.repo) {
-              GitHub.fetchCommits('rails/rails')
-                .then(commits => {
-                  this.setState((state) => ({
-                    ...state,
-                    commits: [...state.commits, ...commits]
-                  }));
-                });
+  useEffect(() => {
+    if (scrollRef.current) {
+      const options = {
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            const { isIntersecting } = entry;
+            if (isIntersecting && entry.target.id === 'scroll') {
+              if (repo) {
+                GitHub.fetchCommits('rails/rails')
+                  .then((moreCommits) => setCommits([...commits, ...moreCommits]))
+              }
             }
-          }
-        });
-      },
-      options
-    );
-    this.state = {commits: []};
-    this.componentDidMount.bind(this);
-  }
+          });
+        },
+        options
+      );
+      observer.observe(scrollRef.current);
+    }
+  }, [scrollRef.current]);
 
-  componentDidMount() {
-    if (!this.state.repo) {
-      // first time, get the repo itself first
+  useEffect(() => {
+    if (!fetched) {
       GitHub.fetchRepo('rails/rails')
-        .then(repo => this.setState({repo}))
+        .then(repo => setRepo({...repo}))
+        .then(() => setFetched(true))
         .then(() => GitHub.fetchCommits('rails/rails'))
-        .then(commits => {
-          this.setState((state) => ({
-            ...state,
-            commits: [...state.commits, ...commits]
-          }));
-        })
+        .then(commits => setCommits([...commits]))
         .catch(error => console.log('error', error));
     }
+  });
 
-    if (this.scrollRef.current) {
-      this.observer.observe(this.scrollRef.current);
-    }
-  }
-
-  render() {
-    return(
-      <div className='container'>
-        {this.state.repo && <Info {...this.state.repo} />}
-        <div className="commits list-group list-group-flush">
-          {this.state.repo && this.state.commits.map((commit, index) => (<Commit key={index} {...commit} />))}
-          <Scroll ref={this.scrollRef} />
-        </div>
+  return(
+    <div className='container'>
+      {repo && <Info {...repo} />}
+      <div className="commits list-group list-group-flush">
+        {commits && commits.map((commit, index) => (<Commit key={index} {...commit} />))}
+        <Scroll ref={scrollRef} />
       </div>
-    )
-  }
+    </div>
+  )
 }
-
-export default hot(module)(App);
