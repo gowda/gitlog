@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
+  "repository": "gowda/gitlog",
   "author": "Basavanagowda Kanur <basavanagowda@gmail.com>",
   "license": "Beerware",
   "devDependencies": {
