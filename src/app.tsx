@@ -65,6 +65,7 @@ export default () => {
       {repo && <Info {...repo} />}
       <div className='commits list-group list-group-flush'>
         {commits &&
+          // eslint-disable-next-line react/no-array-index-key
           commits.map((commit, index) => <Commit key={index} {...commit} />)}
         <Scroll ref={scrollRef} />
       </div>

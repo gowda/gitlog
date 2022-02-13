@@ -5,7 +5,7 @@ module.exports = {
     project: 'tsconfig.json',
   },
   plugins: ['@typescript-eslint'],
-  extends: ['airbnb-typescript', 'prettier'],
+  extends: ['airbnb', 'airbnb-typescript', 'prettier'],
   rules: {
     'import/no-extraneous-dependencies': [
       'error',
@@ -34,5 +34,11 @@ module.exports = {
       },
     ],
     'react/jsx-props-no-spreading': 'off',
+    'react/function-component-definition': [
+      2,
+      {
+        unnamedComponents: 'arrow-function',
+      },
+    ],
   },
 };
